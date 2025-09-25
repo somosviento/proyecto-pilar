@@ -1,0 +1,137 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Flask stuff:
+instance/
+.webassets-cache
+*.db
+*.sqlite
+*.sqlite3
+formularios.db
+
+# Environments
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Logs
+*.log
+logs/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+
+# Flask/Web Specific
+uploads/
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Google Apps Script / API Keys
+service-account-key.json
+credentials.json
+token.json
+
+# Backup files
+*.bak
+*.backup
+
+# Cache directories
+.cache/
+*.cache
+
+# Node.js (if using npm for frontend assets)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production deployment files (keep templates)
+# .env.production  # Keep template but ignore actual production env
+deploy_config.conf
+
+# Apache/WSGI runtime files
+*.pid
+*.sock
+
+# Test files
+test_uploads/
+temp_files/

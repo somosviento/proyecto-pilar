@@ -1,0 +1,78 @@
+# .htaccess para Proyecto Pilar
+# Configuraciones adicionales de Apache
+
+# Redirección a HTTPS (opcional, descomenta si usas SSL)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Configuración de tipos MIME
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType image/svg+xml .svg
+    AddType font/woff2 .woff2
+</IfModule>
+
+# Compresión Gzip
+<IfModule mod_deflate.c>
+    <FilesMatch "\.(html|css|js|xml|txt|json)$">
+        SetOutputFilter DEFLATE
+        SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+        SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+    </FilesMatch>
+</IfModule>
+
+# Cache para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Seguridad - Ocultar información del servidor
+<IfModule mod_headers.c>
+    Header unset Server
+    Header unset X-Powered-By
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options SAMEORIGIN
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Proteger archivos sensibles
+<Files ".env">
+    Require all denied
+</Files>
+
+<Files "*.pyc">
+    Require all denied
+</Files>
+
+<Files "*.pyo">
+    Require all denied
+</Files>
+
+<Files "*.db">
+    Require all denied
+</Files>
+
+<Files "wsgi.py">
+    Require all denied
+</Files>
+
+# Proteger directorios sensibles
+<DirectoryMatch "^.*/(__pycache__|\.git|\.venv|instance|logs)/">
+    Require all denied
+</DirectoryMatch>
+
+# Índice de directorios deshabilitado
+Options -Indexes
+
+# Seguimiento de enlaces simbólicos deshabilitado por seguridad
+Options -FollowSymLinks
