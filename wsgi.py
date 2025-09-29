@@ -56,6 +56,15 @@ try:
     logger.info(f"Directorio del proyecto: {project_dir}")
     logger.info(f"Basepath configurado: /proyecto-pilar")
     
+    # Inicializar base de datos y crear tablas si no existen
+    try:
+        with application.app_context():
+            from models import db
+            db.create_all()
+            logger.info("Base de datos inicializada correctamente")
+    except Exception as e:
+        logger.error(f"Error al inicializar la base de datos: {str(e)}")
+    
 except ImportError as e:
     # Crear una aplicación mínima en caso de error
     from flask import Flask

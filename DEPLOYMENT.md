@@ -95,7 +95,23 @@ sudo nano /etc/apache2/sites-available/proyecto-pilar.conf
 - `/ruta/al/proyecto/pilar2` → `/var/www/proyecto-pilar`
 - `tu-dominio.com` → tu dominio real
 
-### 6. Habilitar Sitio y Reiniciar Apache
+### 6. Inicializar Base de Datos
+
+```bash
+# Cambiar al directorio del proyecto
+cd /var/www/proyecto-pilar
+
+# Activar entorno virtual
+source .venv/bin/activate
+
+# Inicializar la base de datos
+python init_db.py init
+
+# Verificar que las tablas se crearon correctamente
+python init_db.py check
+```
+
+### 7. Habilitar Sitio y Reiniciar Apache
 
 ```bash
 # Habilitar sitio  
@@ -224,6 +240,23 @@ sudo chown -R www-data:www-data /var/www/proyecto-pilar/
 # Verificar permisos de directorios
 sudo chmod 755 /var/www/proyecto-pilar/logs
 sudo chmod 755 /var/www/proyecto-pilar/instance
+```
+
+### Error: "no such table: formularios_actividad"
+```bash
+# La base de datos no está inicializada
+cd /var/www/proyecto-pilar
+source .venv/bin/activate
+python init_db.py init
+
+# Verificar que se crearon las tablas
+python init_db.py check
+
+# Asegurar permisos correctos
+sudo chown www-data:www-data /var/www/proyecto-pilar/instance/
+sudo chown www-data:www-data /var/www/proyecto-pilar/instance/formularios.db
+sudo chmod 755 /var/www/proyecto-pilar/instance/
+sudo chmod 644 /var/www/proyecto-pilar/instance/formularios.db
 ```
 
 ### Error: "Database is locked"
