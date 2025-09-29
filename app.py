@@ -31,12 +31,7 @@ app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', 'tu-clave-secreta-por-d
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///formularios.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Configuración para producción con basepath
-if os.getenv('FLASK_ENV') == 'production':
-    app.config['APPLICATION_ROOT'] = '/proyecto-pilar'
-    # Configurar proxy headers para Apache
-    from werkzeug.middleware.proxy_fix import ProxyFix
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+# Configuración para producción con basepath se maneja en wsgi.py
 
 # Inicializar la base de datos
 db.init_app(app)

@@ -30,12 +30,15 @@ try:
     # Configurar basepath para producción
     application.config['APPLICATION_ROOT'] = '/proyecto-pilar'
     
-    # Configurar URL prefix para manejo de rutas
-    if hasattr(application, 'wsgi_app'):
-        from werkzeug.middleware.dispatcher import DispatcherMiddleware
-        application.wsgi_app = DispatcherMiddleware(application.wsgi_app, {
-            '/proyecto-pilar': application.wsgi_app
-        })
+    # Configurar ProxyFix para manejar headers de Apache correctamente
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    application.wsgi_app = ProxyFix(
+        application.wsgi_app, 
+        x_for=1, 
+        x_proto=1, 
+        x_host=1, 
+        x_prefix=1
+    )
     
     # Log de inicio para debug
     import logging
