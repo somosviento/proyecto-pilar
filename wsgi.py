@@ -19,6 +19,19 @@ project_dir = Path(__file__).parent.absolute()
 if str(project_dir) not in sys.path:
     sys.path.insert(0, str(project_dir))
 
+# FORZAR carga de variables de entorno desde .env
+try:
+    from dotenv import load_dotenv
+    env_path = project_dir / '.env'
+    load_dotenv(dotenv_path=env_path, override=True)
+    print(f"[WSGI] Variables de entorno cargadas desde: {env_path}")
+    print(f"[WSGI] GOOGLE_APPS_SCRIPT_URL: {os.getenv('GOOGLE_APPS_SCRIPT_URL', 'NO CONFIGURADA')}")
+    print(f"[WSGI] GOOGLE_DRIVE_ROOT_FOLDER_ID: {os.getenv('GOOGLE_DRIVE_ROOT_FOLDER_ID', 'NO CONFIGURADA')}")
+except ImportError:
+    print("[WSGI] ERROR: python-dotenv no instalado")
+except Exception as e:
+    print(f"[WSGI] ERROR al cargar .env: {e}")
+
 # Configurar variables de entorno para producción
 os.environ.setdefault('FLASK_ENV', 'production')
 os.environ.setdefault('FLASK_DEBUG', 'False')
