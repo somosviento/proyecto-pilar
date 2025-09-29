@@ -53,6 +53,23 @@ class GoogleDriveManager:
         print(f"[DEBUG] Intentando crear carpeta: {folder_name}")
         print(f"[DEBUG] Root folder ID: {self.root_folder_id}")
         
+        # Validaciones previas
+        if not self.script_url:
+            print(f"[ERROR] script_url no configurada")
+            raise Exception("Google Apps Script URL no configurada. Verificar GOOGLE_APPS_SCRIPT_URL en .env")
+        
+        if not self.token:
+            print(f"[ERROR] token no configurado")
+            raise Exception("Google Apps Script token no configurado. Verificar GOOGLE_APPS_SCRIPT_TOKEN en .env")
+        
+        if not self.root_folder_id:
+            print(f"[ERROR] root_folder_id no configurado")
+            raise Exception("Google Drive root folder ID no configurado. Verificar GOOGLE_DRIVE_ROOT_FOLDER_ID en .env")
+        
+        if 'TU_SCRIPT_ID' in self.script_url:
+            print(f"[ERROR] script_url parece ser un valor de ejemplo")
+            raise Exception("Google Apps Script URL parece ser un valor de ejemplo. Actualizar con la URL real del script desplegado.")
+        
         data = {
             'rootFolderId': self.root_folder_id,
             'folders': [{'name': folder_name}]
@@ -67,10 +84,19 @@ class GoogleDriveManager:
             print(f"[DEBUG] Carpeta creada exitosamente con ID: {folder_id}")
             return folder_id
         else:
+            error_msg = "Error desconocido"
             if result:
-                print(f"[ERROR] Error del servidor: {result.get('message', 'Error desconocido')}")
+                error_msg = result.get('message', 'Error desconocido')
+                print(f"[ERROR] Error del servidor: {error_msg}")
+                if 'token' in error_msg.lower():
+                    raise Exception(f"Error de autenticación: {error_msg}. Verificar GOOGLE_APPS_SCRIPT_TOKEN")
+                elif 'folder' in error_msg.lower():
+                    raise Exception(f"Error de carpeta: {error_msg}. Verificar GOOGLE_DRIVE_ROOT_FOLDER_ID y permisos")
+                else:
+                    raise Exception(f"Error de Google Apps Script: {error_msg}")
             else:
                 print(f"[ERROR] No se recibió respuesta del servidor")
+                raise Exception("No se recibió respuesta del Google Apps Script. Verificar URL y conectividad")
             return None
     
     def upload_file(self, file_content, filename, mime_type, folder_id=None):
