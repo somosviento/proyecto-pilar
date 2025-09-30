@@ -56,6 +56,10 @@ def main():
     except ImportError:
         print("⚠️  python-dotenv no instalado, continuando sin variables de entorno")
     
+    # Configurar variables de entorno para producción (como en wsgi.py)
+    os.environ.setdefault('FLASK_ENV', 'production')
+    os.environ['DATABASE_PATH'] = str(db_file)
+    
     # Inicializar la aplicación y base de datos
     try:
         from app import app, db

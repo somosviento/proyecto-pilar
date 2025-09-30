@@ -36,6 +36,11 @@ except Exception as e:
 os.environ.setdefault('FLASK_ENV', 'production')
 os.environ.setdefault('FLASK_DEBUG', 'False')
 
+# Configurar ruta absoluta de la base de datos para producción
+PROJECT_ROOT = str(project_dir)
+DATABASE_PATH = str(project_dir / 'instance' / 'formularios.db')
+os.environ['DATABASE_PATH'] = DATABASE_PATH
+
 # Importar la aplicación Flask
 try:
     from app import app as application
@@ -121,9 +126,6 @@ if __name__ != '__main__':
     application.config.update(
         # Configuración de seguridad
         SECRET_KEY=os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production'),
-        
-        # Configuración de base de datos (usar ruta absoluta)
-        DATABASE_PATH=str(project_dir / 'instance' / 'formularios.db'),
         
         # Configuración de archivos estáticos
         STATIC_FOLDER=str(project_dir / 'static'),

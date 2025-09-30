@@ -28,8 +28,26 @@ app = Flask(__name__)
 
 # Configuración de la aplicación
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', 'tu-clave-secreta-por-defecto')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///formularios.db')
+
+# Configurar ruta de base de datos
+if os.getenv('FLASK_ENV') == 'production' or os.getenv('DATABASE_PATH'):
+    # En producción, usar ruta absoluta desde wsgi.py
+    database_path = os.getenv('DATABASE_PATH')
+    if database_path:
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_path}'
+    else:
+        # Fallback: construir ruta absoluta
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(project_root, 'instance', 'formularios.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+else:
+    # En desarrollo, usar variable de entorno o ruta relativa
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///instance/formularios.db')
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Debug: Mostrar configuración de base de datos
+print(f"[DEBUG] Database URI configurada: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
 # Configuración para producción con basepath se maneja en wsgi.py
 
