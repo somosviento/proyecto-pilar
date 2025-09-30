@@ -65,18 +65,44 @@ try:
     )
     
     logger = logging.getLogger(__name__)
-    logger.info(f"Aplicación Proyecto Pilar iniciada correctamente")
+    
+    # Usar caracteres ASCII para evitar problemas de encoding en logs
+    logger.info("Aplicacion Proyecto Pilar iniciada correctamente")
     logger.info(f"Directorio del proyecto: {project_dir}")
     logger.info(f"Basepath configurado: /proyecto-pilar")
+    
+    # Verificar y crear directorio instance antes de inicializar DB
+    instance_dir = project_dir / 'instance'
+    logger.info(f"Verificando directorio instance: {instance_dir}")
+    
+    if not instance_dir.exists():
+        try:
+            instance_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+            logger.info(f"Directorio instance creado: {instance_dir}")
+        except Exception as e:
+            logger.error(f"Error creando directorio instance: {str(e)}")
+    
+    # Verificar permisos de escritura en instance
+    try:
+        test_file = instance_dir / 'test_write.tmp'
+        test_file.write_text('test')
+        test_file.unlink()
+        logger.info("Permisos de escritura verificados en instance/")
+    except Exception as e:
+        logger.error(f"Error de permisos en directorio instance: {str(e)}")
+        logger.error(f"Propietario actual: {instance_dir.owner() if hasattr(instance_dir, 'owner') else 'desconocido'}")
     
     # Inicializar base de datos y crear tablas si no existen
     try:
         with application.app_context():
             from models import db
+            db_path = instance_dir / 'formularios.db'
+            logger.info(f"Intentando crear/abrir base de datos en: {db_path}")
             db.create_all()
             logger.info("Base de datos inicializada correctamente")
     except Exception as e:
         logger.error(f"Error al inicializar la base de datos: {str(e)}")
+        logger.error(f"URI de base de datos: {application.config.get('SQLALCHEMY_DATABASE_URI', 'no configurada')}")
     
 except ImportError as e:
     # Crear una aplicación mínima en caso de error
