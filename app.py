@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect, url_for
+from flask import Flask, request, render_template, jsonify, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
@@ -66,6 +66,12 @@ def index():
     """Página principal con el formulario"""
     return render_template('formulario.html')
 
+@app.route('/favicon.ico')
+def favicon():
+    """Servir favicon"""
+    return send_from_directory(os.path.join(app.root_path, 'static', 'img'), 
+                             'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/enviar_formulario', methods=['POST'])
 def enviar_formulario():
     """Procesar el envío del formulario"""
@@ -125,12 +131,15 @@ def extraer_datos_formulario(request):
     except:
         equipo = []
     
-    # Extraer fechas
-    fechas_json = request.form.get('fechas_propuestas', '[]')
+    # Extraer períodos (reemplaza fechas_propuestas)
+    periodos_json = request.form.get('periodos', '[]')
     try:
-        fechas = json.loads(fechas_json)
+        periodos = json.loads(periodos_json)
     except:
-        fechas = []
+        periodos = []
+    
+    # Generar texto legible para el campo 'meses' a partir de los períodos
+    meses_texto = generar_texto_periodos(periodos)
     
     datos = {
         'titulo_actividad': request.form.get('titulo_actividad', '').strip(),
@@ -140,19 +149,39 @@ def extraer_datos_formulario(request):
         'objetivos': request.form.get('objetivos', '').strip(),
         'metodologia': request.form.get('metodologia', '').strip(),
         'grados': request.form.get('grados', '').strip(),
-        'requisitos': request.form.get('requisitos', '').strip(),
         'materiales_presupuesto': request.form.get('materiales_presupuesto', '').strip(),
-        'meses': request.form.get('meses', '').strip(),
-        'fechas': fechas
+        'meses': meses_texto,
+        'periodos': periodos
     }
     
-    # Debug: imprimir los valores de grados y meses
+    # Debug: imprimir los valores de grados y períodos
     app.logger.info(f"[DEBUG] Grados recibidos: '{datos['grados']}'")
-    app.logger.info(f"[DEBUG] Meses recibidos: '{datos['meses']}'")
+    app.logger.info(f"[DEBUG] Períodos recibidos: {datos['periodos']}")
+    app.logger.info(f"[DEBUG] Meses (texto): '{datos['meses']}'")
     print(f"[DEBUG] Grados recibidos: '{datos['grados']}'")
-    print(f"[DEBUG] Meses recibidos: '{datos['meses']}'")
+    print(f"[DEBUG] Períodos recibidos: {datos['periodos']}")
+    print(f"[DEBUG] Meses (texto): '{datos['meses']}'")
     
     return datos
+
+def generar_texto_periodos(periodos):
+    """
+    Convierte la estructura de períodos a texto legible
+    Ejemplo: [{ano: "2025", meses: ["Marzo", "Abril"]}, {ano: "2026", meses: ["Julio"]}]
+    Retorna: "2025: Marzo, Abril | 2026: Julio"
+    """
+    if not periodos:
+        return ''
+    
+    textos_por_ano = []
+    for periodo in periodos:
+        ano = periodo.get('ano', '')
+        meses = periodo.get('meses', [])
+        if ano and meses:
+            meses_str = ', '.join(meses)
+            textos_por_ano.append(f"{ano}: {meses_str}")
+    
+    return ' | '.join(textos_por_ano)
 
 def validar_datos_requeridos(datos):
     """Valida que los campos obligatorios estén presentes"""
@@ -174,14 +203,13 @@ def crear_formulario_db(datos):
         objetivos=datos['objetivos'],
         metodologia=datos['metodologia'],
         grados=datos['grados'],
-        requisitos=datos['requisitos'],
         materiales_presupuesto=datos['materiales_presupuesto'],
         meses=datos['meses']
     )
     
-    # Asignar equipo y fechas usando las propiedades
+    # Asignar equipo y períodos usando las propiedades
     formulario.equipo = datos['equipo']
-    formulario.fechas = datos['fechas']
+    formulario.periodos = datos['periodos']
     
     return formulario
 

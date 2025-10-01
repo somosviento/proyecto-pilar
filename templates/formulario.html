@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Actividad Educativa - UNCOMA</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo_pilar.jpg') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario-pilar.css') }}">
     <style>
         /* Mejoras específicas del diseño del formulario - Siguiendo STYLE_GUIDE EBPB2 */
@@ -397,7 +399,7 @@
 
         .meses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
         }
 
@@ -429,40 +431,22 @@
         }
 
         .month-checkmark {
-            position: absolute;
-            left: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 14px;
-            width: 14px;
-            background-color: white;
-            border: 2px solid var(--color-border);
-            border-radius: 3px;
-            transition: all 0.3s ease;
+            display: none; /* Ocultar completamente el checkmark */
         }
 
         .month-checkbox-label input:checked ~ .month-checkmark {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
+            display: none; /* Mantener oculto cuando está checked */
         }
 
         .month-checkbox-label input:checked ~ .month-checkmark:after {
-            content: "";
-            position: absolute;
-            display: block;
-            left: 3px;
-            top: 0px;
-            width: 3px;
-            height: 7px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
+            display: none; /* Mantener oculto cuando está checked */
         }
 
         .month-checkbox-label:has(input:checked) {
             background: var(--color-accent);
             border-color: var(--color-accent);
             color: white;
+            font-weight: 600;
         }
 
         /* Responsive para meses */
@@ -478,95 +462,82 @@
             }
         }
 
-        /* Estilos para selección de meses */
-        .meses-selection {
+        /* Estilos para selección de ciclos */
+        .ciclos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .ciclo-checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            padding: 1rem 1.5rem;
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .ciclo-checkbox-label:hover {
+            background: var(--color-light);
+            border-color: var(--color-accent);
+            transform: translateY(-1px);
+        }
+
+        .ciclo-checkbox-label input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .ciclo-checkmark {
+            display: none; /* Ocultar completamente el checkmark */
+        }
+
+        .ciclo-checkbox-label:has(input:checked) {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Responsive para ciclos */
+        @media (max-width: 768px) {
+            .ciclos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos para períodos (año + meses) */
+        .periodo-item {
             background: #f8f9fa;
             border-radius: var(--radius);
             padding: 1.5rem;
+            margin-bottom: 1.5rem;
             border: 1px solid var(--color-border);
         }
 
-        .meses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-        }
-
-        .month-checkbox-label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            padding: 0.8rem 1rem;
-            background: white;
-            border: 2px solid var(--color-border);
-            border-radius: var(--radius);
-            transition: all 0.3s ease;
-            font-weight: 500;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .month-checkbox-label:hover {
-            background: var(--color-light);
-            border-color: var(--color-accent);
-            transform: translateY(-1px);
-        }
-
-        .month-checkbox-label input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .month-checkmark {
-            position: absolute;
-            left: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 14px;
-            width: 14px;
-            background-color: white;
-            border: 2px solid var(--color-border);
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .month-checkbox-label input:checked ~ .month-checkmark {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
-        .month-checkbox-label input:checked ~ .month-checkmark:after {
-            content: "";
-            position: absolute;
-            display: block;
-            left: 3px;
-            top: 0px;
-            width: 3px;
-            height: 7px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-
-        .month-checkbox-label:has(input:checked) {
-            background: var(--color-accent);
-            border-color: var(--color-accent);
+        .periodo-remove-btn {
+            background-color: var(--color-danger);
             color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        /* Responsive para meses */
-        @media (max-width: 768px) {
-            .meses-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .meses-grid {
-                grid-template-columns: 1fr;
-            }
+        .periodo-remove-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(234, 67, 53, 0.3);
         }
 
         /* Mejoras para la sección de equipo */
@@ -876,7 +847,7 @@
                 <div class="formulario-section">
                     <!-- Información Básica -->
                     <div class="form-group">
-                        <label for="titulo_actividad" class="form-label">
+                        <label for="titulo_actividad" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Título de la Actividad 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -889,7 +860,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="docente_responsable" class="form-label">
+                        <label for="docente_responsable" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Docente Responsable 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -905,7 +876,7 @@
                     
                     <!-- Descripción Académica -->
                     <div class="form-group">
-                        <label for="fundamentacion" class="form-label">
+                        <label for="fundamentacion" class="form-label"style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Fundamentación 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -918,7 +889,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="objetivos" class="form-label">
+                        <label for="objetivos" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Objetivos y/o propósitos 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -931,7 +902,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="metodologia" class="form-label">
+                        <label for="metodologia" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Metodología 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -947,7 +918,7 @@
 
                     <!-- Equipo de Trabajo -->
                     <div class="form-group">
-                        <label class="form-label">
+                        <label class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Equipo 
                             <span class="required-asterisk">*</span>
                         </label>
@@ -989,7 +960,7 @@
                             <button type="button" 
                                     class="team-add-btn" 
                                     onclick="addTeamMember()">
-                                Agregar Miembro del Equipo
+                                <i class="fas fa-plus"></i> Agregar otra persona
                             </button>
                         </div>
                     </div>
@@ -998,78 +969,30 @@
                     
                     <!-- Información Práctica -->
                     <div class="form-group">
-                        <label class="form-label">
+                        <label class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Grados incluidos en la actividad
                         </label>
-                        <div class="grados-selection">
-                            <div class="ciclo-group">
-                                <h4 class="ciclo-title">Primer Ciclo</h4>
-                                <div class="grados-checkboxes">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="1er Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Primer Grado
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="2do Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Segundo Grado
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="3er Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Tercer Grado
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="ciclo-group">
-                                <h4 class="ciclo-title">Segundo Ciclo</h4>
-                                <div class="grados-checkboxes">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="4to Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Cuarto Grado
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="5to Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Quinto Grado
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="ciclo-group">
-                                <h4 class="ciclo-title">Tercer Ciclo</h4>
-                                <div class="grados-checkboxes">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="6to Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Sexto Grado
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="grados[]" value="7mo Grado" class="grade-checkbox">
-                                        <span class="checkmark"></span>
-                                        Séptimo Grado
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="ciclos-grid">
+                            <label class="ciclo-checkbox-label">
+                                <input type="checkbox" name="grados[]" value="Primer Ciclo" class="grade-checkbox">
+                                <span class="ciclo-checkmark"></span>
+                                Primer Ciclo (1° a 3° grado)
+                            </label>
+                            <label class="ciclo-checkbox-label">
+                                <input type="checkbox" name="grados[]" value="Segundo Ciclo" class="grade-checkbox">
+                                <span class="ciclo-checkmark"></span>
+                                Segundo Ciclo (4° y 5° grado)
+                            </label>
+                            <label class="ciclo-checkbox-label">
+                                <input type="checkbox" name="grados[]" value="Tercer Ciclo" class="grade-checkbox">
+                                <span class="ciclo-checkmark"></span>
+                                Tercer Ciclo (6° y 7° grado)
+                            </label>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="requisitos" class="form-label">
-                            Requisitos
-                        </label>
-                        <textarea id="requisitos" 
-                                  name="requisitos" 
-                                  class="form-control"
-                                  rows="3"
-                                  placeholder="Describa los requisitos previos, criterios de participación y prerrequisitos necesarios para la actividad."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="materiales_presupuesto" class="form-label">
+                        <label for="materiales_presupuesto" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Recursos necesarios
                         </label>
                         <textarea id="materiales_presupuesto" 
@@ -1079,31 +1002,89 @@
                                   placeholder="Detalle los recursos y materiales didácticos necesarios. Especificar si necesitarán aportes de esta Secretaria."></textarea>
                     </div>
                     
-                    <hr class="section-divider">
+                    <!-- <hr class="section-divider"> -->
                     
-                    <!-- Cronograma -->
                     <div class="form-group">
-                        <label class="form-label" style="margin-bottom: 0rem; font-size: 1.1rem;">
+                        <label class="form-label" style="margin-bottom: 1rem; font-size: 1.1rem;">
                             Proponer fechas para la realización de la actividad
                         </label>
-                        <p class="text-muted" style="margin-bottom: 0.5rem; font-size: 0.95rem;">
-                            Agregue una o más fechas opcionales para el desarrollo de la actividad educativa.
+                        <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.95rem;">
+                            Agregue períodos (año + meses) durante los cuales se podría desarrollar la actividad.
                         </p>
                         
-                        <div id="datesContainer">
-                            <div class="date-input">
-                                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                                    <label class="form-label">Fecha propuesta</label>
-                                    <input type="date" 
-                                           name="fechas_propuestas[]" 
-                                           class="form-control"
-                                           style="margin-bottom: 0;">
+                        <div id="periodosContainer">
+                            <div class="periodo-item">
+                                <div class="form-group" style="margin-bottom: 1rem;">
+                                    <label class="form-label" style="margin-bottom: 0rem; font-size: 0.95rem;">Año</label>
+                                    <select name="anos[]" class="form-control ano-select" style="max-width: 150px;">
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                    </select>
                                 </div>
-                                <div style="display: flex; align-items: end;">
+                                
+                                <div class="form-group" style="margin-bottom: 1rem;">
+                                    <label class="form-label" style="margin-bottom: 0.5rem; font-size: 0.95rem;">Meses del año seleccionado</label>
+                                    <div class="meses-grid">
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Febrero">
+                                            <span class="month-checkmark"></span>
+                                            Febrero
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Marzo">
+                                            <span class="month-checkmark"></span>
+                                            Marzo
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Abril">
+                                            <span class="month-checkmark"></span>
+                                            Abril
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Mayo">
+                                            <span class="month-checkmark"></span>
+                                            Mayo
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Junio">
+                                            <span class="month-checkmark"></span>
+                                            Junio
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Julio">
+                                            <span class="month-checkmark"></span>
+                                            Julio
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Agosto">
+                                            <span class="month-checkmark"></span>
+                                            Agosto
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Septiembre">
+                                            <span class="month-checkmark"></span>
+                                            Septiembre
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Octubre">
+                                            <span class="month-checkmark"></span>
+                                            Octubre
+                                        </label>
+                                        <label class="month-checkbox-label">
+                                            <input type="checkbox" class="month-checkbox" data-mes="Noviembre">
+                                            <span class="month-checkmark"></span>
+                                            Noviembre
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center" style="margin-top: 1rem;">
                                     <button type="button" 
-                                            class="date-remove-btn" 
-                                            onclick="removeDateInput(this)">
-                                        Eliminar
+                                            class="periodo-remove-btn" 
+                                            onclick="removePeriodo(this)">
+                                        Eliminar Período
                                     </button>
                                 </div>
                             </div>
@@ -1112,86 +1093,9 @@
                         <div class="text-center mt-lg">
                             <button type="button" 
                                     class="dates-add-btn" 
-                                    onclick="addDateInput()">
-                                Agregar Fecha
+                                    onclick="addPeriodo()">
+                                <i class="fas fa-plus"></i> Agregar Otro Período
                             </button>
-                            <!-- <div class="stats" id="datesStats">
-                                📊 Total de fechas propuestas: <span id="datesCount">1</span>
-                            </div> -->
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" style="margin-bottom: 1rem; font-size: 1.1rem;">
-                            Meses propuestos
-                        </label>
-                        <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.95rem;">
-                            Seleccione uno o más meses durante los cuales se podría desarrollar la actividad.
-                        </p>
-                        
-                        <div class="meses-selection">
-                            <div class="meses-grid">
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Enero" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Enero
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Febrero" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Febrero
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Marzo" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Marzo
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Abril" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Abril
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Mayo" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Mayo
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Junio" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Junio
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Julio" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Julio
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Agosto" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Agosto
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Septiembre" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Septiembre
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Octubre" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Octubre
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Noviembre" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Noviembre
-                                </label>
-                                <label class="month-checkbox-label">
-                                    <input type="checkbox" name="meses[]" value="Diciembre" class="month-checkbox">
-                                    <span class="month-checkmark"></span>
-                                    Diciembre
-                                </label>
-                            </div>
                         </div>
                     </div>
                     
@@ -1323,63 +1227,110 @@
             }
         }
         
-        function addDateInput() {
-            const container = document.getElementById('datesContainer');
-            const newDate = document.createElement('div');
-            newDate.className = 'date-input';
-            newDate.innerHTML = `
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label class="form-label">Fecha propuesta</label>
-                    <input type="date" name="fechas_propuestas[]" class="form-control" style="margin-bottom: 0;">
+        function addPeriodo() {
+            const container = document.getElementById('periodosContainer');
+            const newPeriodo = document.createElement('div');
+            newPeriodo.className = 'periodo-item';
+            newPeriodo.innerHTML = `
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label class="form-label">Año</label>
+                    <select name="anos[]" class="form-control ano-select" style="max-width: 150px;">
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
                 </div>
-                <div style="display: flex; align-items: end;">
-                    <button type="button" class="date-remove-btn" onclick="removeDateInput(this)">Eliminar</button>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label class="form-label">Meses del año seleccionado</label>
+                    <div class="meses-grid">
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Febrero">
+                            <span class="month-checkmark"></span>
+                            Febrero
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Marzo">
+                            <span class="month-checkmark"></span>
+                            Marzo
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Abril">
+                            <span class="month-checkmark"></span>
+                            Abril
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Mayo">
+                            <span class="month-checkmark"></span>
+                            Mayo
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Junio">
+                            <span class="month-checkmark"></span>
+                            Junio
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Julio">
+                            <span class="month-checkmark"></span>
+                            Julio
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Agosto">
+                            <span class="month-checkmark"></span>
+                            Agosto
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Septiembre">
+                            <span class="month-checkmark"></span>
+                            Septiembre
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Octubre">
+                            <span class="month-checkmark"></span>
+                            Octubre
+                        </label>
+                        <label class="month-checkbox-label">
+                            <input type="checkbox" class="month-checkbox" data-mes="Noviembre">
+                            <span class="month-checkmark"></span>
+                            Noviembre
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="text-center" style="margin-top: 1rem;">
+                    <button type="button" 
+                            class="periodo-remove-btn" 
+                            onclick="removePeriodo(this)">
+                        Eliminar Período
+                    </button>
                 </div>
             `;
             
-            newDate.style.opacity = '0';
-            newDate.style.transform = 'translateY(20px)';
-            container.appendChild(newDate);
+            newPeriodo.style.opacity = '0';
+            newPeriodo.style.transform = 'translateY(20px)';
+            container.appendChild(newPeriodo);
             
             setTimeout(() => {
-                newDate.style.transition = 'all 0.3s ease';
-                newDate.style.opacity = '1';
-                newDate.style.transform = 'translateY(0)';
+                newPeriodo.style.transition = 'all 0.3s ease';
+                newPeriodo.style.opacity = '1';
+                newPeriodo.style.transform = 'translateY(0)';
             }, 10);
-            
-            updateDatesCounter();
         }
         
-        function removeDateInput(button) {
-            const dateInputs = document.querySelectorAll('.date-input');
-            if (dateInputs.length > 1) {
-                const dateElement = button.closest('.date-input');
-                
-                dateElement.style.transition = 'all 0.3s ease';
-                dateElement.style.opacity = '0';
-                dateElement.style.transform = 'translateX(-100%)';
+        function removePeriodo(button) {
+            const periodoItems = document.querySelectorAll('.periodo-item');
+            if (periodoItems.length > 1) {
+                const periodoElement = button.closest('.periodo-item');
+                periodoElement.style.transition = 'all 0.3s ease';
+                periodoElement.style.opacity = '0';
+                periodoElement.style.transform = 'translateX(-100%)';
                 
                 setTimeout(() => {
-                    dateElement.remove();
-                    updateDatesCounter();
+                    periodoElement.remove();
                 }, 300);
             } else {
-                showAlert('Debe mantener al menos una fecha propuesta', 'danger');
-            }
-        }
-        
-        function updateDatesCounter() {
-            const datesCount = document.querySelectorAll('.date-input').length;
-            const counterElement = document.getElementById('datesCount');
-            if (counterElement) {
-                counterElement.textContent = datesCount;
-                
-                counterElement.style.transform = 'scale(1.2)';
-                counterElement.style.color = 'var(--color-info)';
-                setTimeout(() => {
-                    counterElement.style.transform = 'scale(1)';
-                    counterElement.style.color = 'inherit';
-                }, 200);
+                showAlert('Debe mantener al menos un período', 'danger');
             }
         }
         
@@ -1418,7 +1369,6 @@
             formData.append('fundamentacion', document.getElementById('fundamentacion').value);
             formData.append('objetivos', document.getElementById('objetivos').value);
             formData.append('metodologia', document.getElementById('metodologia').value);
-            formData.append('requisitos', document.getElementById('requisitos').value);
             formData.append('materiales_presupuesto', document.getElementById('materiales_presupuesto').value);
             
             // Recopilar grados seleccionados
@@ -1428,12 +1378,28 @@
             });
             console.log('Grados seleccionados:', gradosSeleccionados);
             
-            // Recopilar meses seleccionados
-            const mesesSeleccionados = [];
-            document.querySelectorAll('input[name="meses[]"]:checked').forEach(checkbox => {
-                mesesSeleccionados.push(checkbox.value);
+            // Recopilar períodos (años + meses seleccionados)
+            const periodos = [];
+            document.querySelectorAll('.periodo-item').forEach(periodoItem => {
+                const ano = periodoItem.querySelector('.ano-select').value;
+                const mesesCheckboxes = periodoItem.querySelectorAll('.month-checkbox:checked');
+                const meses = [];
+                
+                mesesCheckboxes.forEach(checkbox => {
+                    meses.push(checkbox.getAttribute('data-mes'));
+                });
+                
+                if (meses.length > 0) {
+                    periodos.push({
+                        ano: ano,
+                        meses: meses
+                    });
+                }
             });
-            console.log('Meses seleccionados:', mesesSeleccionados);
+            console.log('Períodos seleccionados:', periodos);
+            
+            // Crear string legible de períodos para mostrar
+            let periodosTexto = periodos.map(p => `${p.ano}: ${p.meses.join(', ')}`).join(' | ');
             
             const equipoNombres = document.querySelectorAll('input[name="equipo_apellido_nombre[]"]');
             const equipoDnis = document.querySelectorAll('input[name="equipo_dni[]"]');
@@ -1450,14 +1416,6 @@
                 }
             }
             
-            const fechasInputs = document.querySelectorAll('input[name="fechas_propuestas[]"]');
-            const fechas = [];
-            fechasInputs.forEach(input => {
-                if (input.value) {
-                    fechas.push(input.value);
-                }
-            });
-            
             let equipoInput = document.getElementById('hidden_equipo');
             if (!equipoInput) {
                 equipoInput = document.createElement('input');
@@ -1468,17 +1426,7 @@
             }
             equipoInput.value = JSON.stringify(equipo);
             
-            let fechasInput = document.getElementById('hidden_fechas');
-            if (!fechasInput) {
-                fechasInput = document.createElement('input');
-                fechasInput.type = 'hidden';
-                fechasInput.name = 'fechas_propuestas';
-                fechasInput.id = 'hidden_fechas';
-                document.getElementById('formularioActividad').appendChild(fechasInput);
-            }
-            fechasInput.value = JSON.stringify(fechas);
-            
-            // Crear inputs hidden para grados y meses
+            // Crear inputs hidden para grados y períodos
             let gradosInput = document.getElementById('hidden_grados');
             if (!gradosInput) {
                 gradosInput = document.createElement('input');
@@ -1489,6 +1437,17 @@
             }
             gradosInput.value = gradosSeleccionados.join(', ');
             
+            let periodosInput = document.getElementById('hidden_periodos');
+            if (!periodosInput) {
+                periodosInput = document.createElement('input');
+                periodosInput.type = 'hidden';
+                periodosInput.name = 'periodos';
+                periodosInput.id = 'hidden_periodos';
+                document.getElementById('formularioActividad').appendChild(periodosInput);
+            }
+            periodosInput.value = JSON.stringify(periodos);
+            
+            // Crear input para texto legible de períodos
             let mesesInput = document.getElementById('hidden_meses');
             if (!mesesInput) {
                 mesesInput = document.createElement('input');
@@ -1497,7 +1456,7 @@
                 mesesInput.id = 'hidden_meses';
                 document.getElementById('formularioActividad').appendChild(mesesInput);
             }
-            mesesInput.value = mesesSeleccionados.join(', ');
+            mesesInput.value = periodosTexto;
             
             document.getElementById('formularioActividad').submit();
         });

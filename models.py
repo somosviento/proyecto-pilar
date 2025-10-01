@@ -20,10 +20,11 @@ class FormularioActividad(db.Model):
     objetivos = db.Column(db.Text, nullable=False)
     metodologia = db.Column(db.Text, nullable=False)
     grados = db.Column(db.Text)
-    requisitos = db.Column(db.Text)
     materiales_presupuesto = db.Column(db.Text)
-    meses = db.Column(db.Text)  # Meses propuestos separados por comas
-    fechas_propuestas = db.Column(db.Text)  # JSON string con las fechas
+    
+    # Períodos (año + meses) guardado como JSON
+    periodos_json = db.Column(db.Text)  # JSON string con formato [{"ano": "2025", "meses": ["Marzo", "Abril"]}, ...]
+    meses = db.Column(db.Text)  # Texto legible de períodos para mostrar (ej: "2025: Marzo, Abril | 2026: Mayo")
     
     # Metadatos del formulario
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
@@ -55,22 +56,22 @@ class FormularioActividad(db.Model):
             self.equipo_json = None
     
     @property
-    def fechas(self):
-        """Deserializa las fechas desde JSON"""
-        if self.fechas_propuestas:
+    def periodos(self):
+        """Deserializa los períodos desde JSON"""
+        if self.periodos_json:
             try:
-                return json.loads(self.fechas_propuestas)
+                return json.loads(self.periodos_json)
             except:
                 return []
         return []
     
-    @fechas.setter
-    def fechas(self, value):
-        """Serializa las fechas a JSON"""
+    @periodos.setter
+    def periodos(self, value):
+        """Serializa los períodos a JSON"""
         if value:
-            self.fechas_propuestas = json.dumps(value)
+            self.periodos_json = json.dumps(value)
         else:
-            self.fechas_propuestas = None
+            self.periodos_json = None
     
     def to_dict(self):
         """Convierte el objeto a diccionario para facilitar el uso"""
@@ -83,10 +84,9 @@ class FormularioActividad(db.Model):
             'objetivos': self.objetivos,
             'metodologia': self.metodologia,
             'grados': self.grados,
-            'requisitos': self.requisitos,
             'materiales_presupuesto': self.materiales_presupuesto,
+            'periodos': self.periodos,
             'meses': self.meses,
-            'fechas': self.fechas,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             'fecha_modificacion': self.fecha_modificacion.isoformat() if self.fecha_modificacion else None,
             'documento_id': self.documento_id,
