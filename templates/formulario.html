@@ -831,7 +831,7 @@
                     <img src="{{ url_for('static', filename='img/logo_seu.png') }}" alt="Logo SEU" class="logo-right">
                 </div>
                 <div class="header-center">
-                    <h1>Carga de Propuestas en el marco del Proyecto PILAR_UNCo <br>
+                    <h1>Carga de Propuestas en el marco del Proyecto PILAR-UNCo <br>
                             Convocatoria 2025-2026</h1>
                     <h1>Formulario de Actividad Educativa</h1>
                     <p class="subtitle">Universidad Nacional del Comahue</p>
@@ -870,6 +870,17 @@
                                class="form-control" 
                                required 
                                placeholder="Nombre completo del docente responsable">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="departamento" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
+                            Departamento/Instituto de pertenencia
+                        </label>
+                        <input type="text" 
+                               id="departamento" 
+                               name="departamento" 
+                               class="form-control" 
+                               placeholder="Ej: Departamento de Matemática">
                     </div>
                     
                     <hr class="section-divider">
@@ -945,6 +956,27 @@
                                            name="equipo_correo[]" 
                                            class="form-control" 
                                            placeholder="correo@uncoma.edu.ar">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Claustro</label>
+                                    <select name="equipo_claustro[]" 
+                                            class="form-control claustro-select" 
+                                            onchange="toggleClaustroOtro(this)">
+                                        <option value="">Seleccionar claustro</option>
+                                        <option value="Docente">Docente</option>
+                                        <option value="Nodocente">Nodocente</option>
+                                        <option value="Estudiante">Estudiante</option>
+                                        <option value="Graduado/a">Graduado/a</option>
+                                        <option value="Investigador/a">Investigador/a</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group claustro-otro-container" style="display: none;">
+                                    <label class="form-label">Especificar otro claustro</label>
+                                    <input type="text" 
+                                           name="equipo_claustro_otro[]" 
+                                           class="form-control" 
+                                           placeholder="Especificar...">
                                 </div>
                                 <div style="display: flex; align-items: end;">
                                     <button type="button" 
@@ -1158,6 +1190,23 @@
             });
         }
         
+        function toggleClaustroOtro(selectElement) {
+            // Encontrar el contenedor del miembro del equipo
+            const teamMember = selectElement.closest('.team-member');
+            // Encontrar el campo de texto "otro" dentro de ese miembro
+            const otroContainer = teamMember.querySelector('.claustro-otro-container');
+            const otroInput = teamMember.querySelector('input[name="equipo_claustro_otro[]"]');
+            
+            if (selectElement.value === 'Otro') {
+                otroContainer.style.display = 'block';
+                otroInput.required = true;
+            } else {
+                otroContainer.style.display = 'none';
+                otroInput.required = false;
+                otroInput.value = ''; // Limpiar el valor si no es "Otro"
+            }
+        }
+        
         function addTeamMember() {
             const container = document.getElementById('teamContainer');
             
@@ -1175,6 +1224,22 @@
                 <div class="form-group">
                     <label class="form-label">Correo Electrónico</label>
                     <input type="email" name="equipo_correo[]" class="form-control" placeholder="correo@uncoma.edu.ar">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Claustro</label>
+                    <select name="equipo_claustro[]" class="form-control claustro-select" onchange="toggleClaustroOtro(this)">
+                        <option value="">Seleccionar claustro</option>
+                        <option value="Docente">Docente</option>
+                        <option value="Nodocente">Nodocente</option>
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Graduado/a">Graduado/a</option>
+                        <option value="Investigador/a">Investigador/a</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group claustro-otro-container" style="display: none;">
+                    <label class="form-label">Especificar otro claustro</label>
+                    <input type="text" name="equipo_claustro_otro[]" class="form-control" placeholder="Especificar...">
                 </div>
                 <div style="display: flex; align-items: end;">
                     <button type="button" class="team-remove-btn" onclick="removeTeamMember(this)">Eliminar</button>
@@ -1366,6 +1431,7 @@
             
             formData.append('titulo_actividad', document.getElementById('titulo_actividad').value);
             formData.append('docente_responsable', document.getElementById('docente_responsable').value);
+            formData.append('departamento', document.getElementById('departamento').value);
             formData.append('fundamentacion', document.getElementById('fundamentacion').value);
             formData.append('objetivos', document.getElementById('objetivos').value);
             formData.append('metodologia', document.getElementById('metodologia').value);
@@ -1404,14 +1470,22 @@
             const equipoNombres = document.querySelectorAll('input[name="equipo_apellido_nombre[]"]');
             const equipoDnis = document.querySelectorAll('input[name="equipo_dni[]"]');
             const equipoCorreos = document.querySelectorAll('input[name="equipo_correo[]"]');
+            const equipoClaustros = document.querySelectorAll('select[name="equipo_claustro[]"]');
+            const equipoClaustrosOtro = document.querySelectorAll('input[name="equipo_claustro_otro[]"]');
             
             const equipo = [];
             for (let i = 0; i < equipoNombres.length; i++) {
                 if (equipoNombres[i].value.trim()) {
+                    const claustro = equipoClaustros[i].value;
+                    const claustroFinal = (claustro === 'Otro' && equipoClaustrosOtro[i].value.trim()) 
+                        ? equipoClaustrosOtro[i].value 
+                        : claustro;
+                    
                     equipo.push({
                         apellido_nombre: equipoNombres[i].value,
                         dni: equipoDnis[i].value,
-                        correo: equipoCorreos[i].value
+                        correo: equipoCorreos[i].value,
+                        claustro: claustroFinal
                     });
                 }
             }

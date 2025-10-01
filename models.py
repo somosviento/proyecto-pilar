@@ -12,6 +12,7 @@ class FormularioActividad(db.Model):
     # Campos del formulario
     titulo_actividad = db.Column(db.Text, nullable=False)
     docente_responsable = db.Column(db.String(200), nullable=False)
+    departamento = db.Column(db.String(200))  # Departamento/Instituto de pertenencia
     
     # Equipo (guardado como JSON)
     equipo_json = db.Column(db.Text)  # JSON string con el array de miembros del equipo
@@ -79,6 +80,7 @@ class FormularioActividad(db.Model):
             'id': self.id,
             'titulo_actividad': self.titulo_actividad,
             'docente_responsable': self.docente_responsable,
+            'departamento': self.departamento,
             'equipo': self.equipo,
             'fundamentacion': self.fundamentacion,
             'objetivos': self.objetivos,

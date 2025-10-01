@@ -144,6 +144,7 @@ def extraer_datos_formulario(request):
     datos = {
         'titulo_actividad': request.form.get('titulo_actividad', '').strip(),
         'docente_responsable': request.form.get('docente_responsable', '').strip(),
+        'departamento': request.form.get('departamento', '').strip(),
         'equipo': equipo,
         'fundamentacion': request.form.get('fundamentacion', '').strip(),
         'objetivos': request.form.get('objetivos', '').strip(),
@@ -199,6 +200,7 @@ def crear_formulario_db(datos):
     formulario = FormularioActividad(
         titulo_actividad=datos['titulo_actividad'],
         docente_responsable=datos['docente_responsable'],
+        departamento=datos['departamento'],
         fundamentacion=datos['fundamentacion'],
         objetivos=datos['objetivos'],
         metodologia=datos['metodologia'],

@@ -1,11 +1,12 @@
 #!/bin/bash
-# Script de despliegue rápido para producción
-# Ejecuta todos los pasos necesarios para aplicar la migración
+# Script de despliegue rápido para producción v2.0
+# Ejecuta todos los pasos necesarios para aplicar la migración completa
+# Incluye: periodos_json, departamento, claustro
 
 set -e  # Detener si hay errores
 
 echo "=========================================="
-echo "  DESPLIEGUE Y MIGRACIÓN - PROYECTO PILAR"
+echo "  DESPLIEGUE Y MIGRACIÓN - PROYECTO PILAR v2.0"
 echo "=========================================="
 echo ""
 
@@ -49,9 +50,10 @@ if [ $? -ne 0 ]; then
 fi
 echo ""
 
-# 3. Ejecutar migración
-echo "🚀 Ejecutando migración de base de datos..."
-python3 migrate_production.py /var/www/proyecto-pilar/instance/formularios.db
+# 3. Ejecutar migración completa
+echo "🚀 Ejecutando migración completa de base de datos..."
+echo "   (periodos_json, departamento, eliminación de campos obsoletos)"
+python3 migrate_complete.py /var/www/proyecto-pilar/instance/formularios.db
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}❌ La migración falló${NC}"
