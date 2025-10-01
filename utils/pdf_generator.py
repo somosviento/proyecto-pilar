@@ -283,15 +283,14 @@ class PDFGenerator:
         fields = {
             'TITULO_ACTIVIDAD': ensure_not_empty(formulario_data.get('titulo_actividad', '')),
             'DOCENTE_RESPONSABLE': ensure_not_empty(formulario_data.get('docente_responsable', '')),
+            'DEPARTAMENTO': ensure_not_empty(formulario_data.get('departamento', '')),
             'EQUIPO': ensure_not_empty(equipo_text),
             'FUNDAMENTACION': ensure_not_empty(formulario_data.get('fundamentacion', '')),
             'OBJETIVOS': ensure_not_empty(formulario_data.get('objetivos', '')),
             'METODOLOGIA': ensure_not_empty(formulario_data.get('metodologia', '')),
             'GRADOS': ensure_not_empty(formulario_data.get('grados', '')),
-            'REQUISITOS': ensure_not_empty(formulario_data.get('requisitos', '')),
             'MATERIALES_PRESUPUESTO': ensure_not_empty(formulario_data.get('materiales_presupuesto', '')),
-            'MESES': ensure_not_empty(formulario_data.get('meses', '')),
-            'FECHAS_PROPUESTAS': ensure_not_empty(fechas_text),
+            'PERIODOS': ensure_not_empty(formulario_data.get('meses', '')),
             'FECHA_GENERACION': datetime.now().strftime("%d/%m/%Y"),
             'AÑO_CONVOCATORIA': str(datetime.now().year),
             'CUADRO_FIRMA': ensure_not_empty(firma_info)
@@ -308,7 +307,7 @@ class PDFGenerator:
             return '\n\n\nFirma del Docente Responsable:\n\n_________________________________\n\n'
     
     def _formatear_equipo_para_template(self, equipo_data):
-        """Formatear información del equipo para el template de Google Docs"""
+        """Formatear información del equipo para el template de Google Docs (incluye claustro)"""
         if not equipo_data:
             return "No se especificó equipo de trabajo."
         
@@ -318,6 +317,7 @@ class PDFGenerator:
             nombre = miembro.get('apellido_nombre', '').strip()
             dni = miembro.get('dni', '').strip()
             correo = miembro.get('correo', '').strip()
+            claustro = miembro.get('claustro', '').strip()
             
             if nombre:  # Solo agregar si hay al menos un nombre
                 equipo_text += f"{i}. {nombre}"
@@ -325,6 +325,8 @@ class PDFGenerator:
                     equipo_text += f" (DNI: {dni})"
                 if correo:
                     equipo_text += f" - {correo}"
+                if claustro:
+                    equipo_text += f" - Claustro: {claustro}"
                 equipo_text += "\n"
         
         # Si no hay miembros válidos

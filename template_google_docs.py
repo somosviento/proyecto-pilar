@@ -12,6 +12,33 @@ Para crear el template:
 5. Configurar TEMPLATE_DOC_ID en el archivo .env
 
 Los placeholders [[CAMPO]] serán reemplazados automáticamente por los datos del formulario.
+
+PLACEHOLDERS DISPONIBLES:
+- [[TITULO_ACTIVIDAD]] - Título de la actividad
+- [[DOCENTE_RESPONSABLE]] - Nombre del docente responsable
+- [[DEPARTAMENTO]] - Departamento/Instituto de pertenencia
+- [[EQUIPO]] - Lista de integrantes (incluye nombre, DNI, correo y claustro)
+- [[FUNDAMENTACION]] - Fundamentación de la actividad
+- [[OBJETIVOS]] - Objetivos y propósitos
+- [[METODOLOGIA]] - Metodología a utilizar
+- [[GRADOS]] - Grados/ciclos incluidos
+- [[MATERIALES_PRESUPUESTO]] - Materiales e insumos
+- [[PERIODOS]] - Períodos propuestos (formato: "2025: Marzo, Abril | 2026: Mayo")
+- [[FECHA_GENERACION]] - Fecha de generación del documento
+- [[CUADRO_FIRMA]] - Espacio para firma
+
+NOTA SOBRE [[EQUIPO]]:
+El placeholder [[EQUIPO]] será reemplazado por una lista formateada que incluye:
+- Apellido y Nombre
+- DNI
+- Correo electrónico
+- Claustro (Docente, Nodocente, Estudiante, Graduado/a, Investigador/a, etc.)
+
+Ejemplo de formato:
+  • García, María Elena
+    DNI: 12345678
+    Correo: garcia@uncoma.edu.ar
+    Claustro: Docente
 """
 
 TEMPLATE_CONTENT = """
@@ -26,6 +53,8 @@ Título de la Actividad
 [[TITULO_ACTIVIDAD]]
 
 Docente Responsable: [[DOCENTE_RESPONSABLE]]
+
+Departamento/Instituto de pertenencia: [[DEPARTAMENTO]]
 
 Equipo
 
@@ -47,21 +76,13 @@ Grados incluidos en la actividad
 
 [[GRADOS]]
 
-Requisitos
-
-[[REQUISITOS]]
-
 Materiales e insumos / Presupuesto
 
 [[MATERIALES_PRESUPUESTO]]
 
-Proponer fechas para la realización de la actividad
+Períodos propuestos para la realización de la actividad
 
-[[FECHAS_PROPUESTAS]]
-
-Meses propuestos
-
-[[MESES]]
+[[PERIODOS]]
 
 Firma del Docente Responsable
 

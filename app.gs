@@ -372,7 +372,7 @@ function replaceFieldsInDocument(documentId, fields, signatureData, equipoData) 
 }
 
 /**
- * Inserta una tabla del equipo en el documento
+ * Inserta una tabla del equipo en el documento (incluye claustro)
  * @param {DocumentApp.Document} doc - El documento donde insertar la tabla
  * @param {Array} equipoData - Array con los datos del equipo
  */
@@ -400,9 +400,9 @@ function insertTeamTableInDocument(doc, equipoData) {
         element.asText().deleteText(startOffset, endOffset);
       }
       
-      // Crear la tabla con encabezados
+      // Crear la tabla con encabezados (ahora incluye Claustro)
       const tableData = [
-        ['Apellido y Nombre', 'DNI', 'Correo Electrónico']
+        ['Apellido y Nombre', 'DNI', 'Correo Electrónico', 'Claustro']
       ];
       
       // Agregar filas de datos del equipo
@@ -410,7 +410,8 @@ function insertTeamTableInDocument(doc, equipoData) {
         tableData.push([
           miembro.apellido_nombre || '',
           miembro.dni || '',
-          miembro.correo || ''
+          miembro.correo || '',
+          miembro.claustro || ''
         ]);
       });
       
