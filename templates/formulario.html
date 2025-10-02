@@ -998,11 +998,11 @@
                                            placeholder="correo@uncoma.edu.ar">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Claustro</label>
+                                    <label class="form-label">Claustro / Rol</label>
                                     <select name="equipo_claustro[]" 
                                             class="form-control claustro-select" 
                                             onchange="toggleClaustroOtro(this)">
-                                        <option value="">Seleccionar claustro</option>
+                                        <option value="">Seleccionar</option>
                                         <option value="Docente">Docente</option>
                                         <option value="Nodocente">Nodocente</option>
                                         <option value="Estudiante">Estudiante</option>
@@ -1012,7 +1012,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group claustro-otro-container" style="display: none;">
-                                    <label class="form-label">Especificar otro claustro</label>
+                                    <label class="form-label">Especificar otro</label>
                                     <input type="text" 
                                            name="equipo_claustro_otro[]" 
                                            class="form-control" 
@@ -1043,6 +1043,7 @@
                     <div class="form-group">
                         <label class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Grados incluidos en la actividad
+                            <span class="required-asterisk">*</span>
                         </label>
                         <div class="ciclos-grid">
                             <label class="ciclo-checkbox-label">
@@ -1066,10 +1067,12 @@
                     <div class="form-group">
                         <label for="materiales_presupuesto" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Recursos necesarios
+                            <span class="required-asterisk">*</span>
                         </label>
                         <textarea id="materiales_presupuesto" 
                                   name="materiales_presupuesto" 
                                   class="form-control"
+                                  required
                                   rows="5"
                                   placeholder="Detalle los recursos y materiales didácticos necesarios. Especificar si necesitarán aportes de esta Secretaria."></textarea>
                     </div>
@@ -1079,6 +1082,7 @@
                     <div class="form-group">
                         <label class="form-label" style="margin-bottom: 1rem; font-size: 1.1rem;">
                             Proponer fechas para la realización de la actividad
+                            <span class="required-asterisk">*</span>
                         </label>
                         <p class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.95rem;">
                             Agregue períodos (año + meses) durante los cuales se podría desarrollar la actividad.
@@ -1278,7 +1282,7 @@
                     </select>
                 </div>
                 <div class="form-group claustro-otro-container" style="display: none;">
-                    <label class="form-label">Especificar otro claustro</label>
+                    <label class="form-label">Especificar otro</label>
                     <input type="text" name="equipo_claustro_otro[]" class="form-control" placeholder="Especificar...">
                 </div>
                 <div style="display: flex; align-items: end;">
@@ -1456,12 +1460,19 @@
         document.getElementById('formularioActividad').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const requiredFields = ['titulo_actividad', 'docente_responsable', 'fundamentacion', 'objetivos', 'metodologia'];
+            const requiredFields = ['titulo_actividad', 'docente_responsable', 'fundamentacion', 'objetivos', 'metodologia', 'materiales_presupuesto'];
             for (let field of requiredFields) {
                 if (!document.getElementById(field).value.trim()) {
                     showAlert(`El campo "${document.querySelector(`label[for="${field}"]`).textContent}" es obligatorio`, 'danger');
                     return;
                 }
+            }
+            
+            // Validar que al menos un grado esté seleccionado
+            const gradosSeleccionados = document.querySelectorAll('input[name="grados[]"]:checked');
+            if (gradosSeleccionados.length === 0) {
+                showAlert('Debe seleccionar al menos un grado para la actividad', 'danger');
+                return;
             }
             
             document.getElementById('submitBtn').disabled = true;
@@ -1478,11 +1489,11 @@
             formData.append('materiales_presupuesto', document.getElementById('materiales_presupuesto').value);
             
             // Recopilar grados seleccionados
-            const gradosSeleccionados = [];
+            const gradosSeleccionadosArray = [];
             document.querySelectorAll('input[name="grados[]"]:checked').forEach(checkbox => {
-                gradosSeleccionados.push(checkbox.value);
+                gradosSeleccionadosArray.push(checkbox.value);
             });
-            console.log('Grados seleccionados:', gradosSeleccionados);
+            console.log('Grados seleccionados:', gradosSeleccionadosArray);
             
             // Recopilar períodos (años + meses seleccionados)
             const periodos = [];
@@ -1503,6 +1514,12 @@
                 }
             });
             console.log('Períodos seleccionados:', periodos);
+            
+            // Validar que al menos un período tenga meses seleccionados
+            if (periodos.length === 0) {
+                showAlert('Debe seleccionar al menos un año con meses para la realización de la actividad', 'danger');
+                return;
+            }
             
             // Crear string legible de períodos para mostrar
             let periodosTexto = periodos.map(p => `${p.ano}: ${p.meses.join(', ')}`).join(' | ');
@@ -1549,7 +1566,7 @@
                 gradosInput.id = 'hidden_grados';
                 document.getElementById('formularioActividad').appendChild(gradosInput);
             }
-            gradosInput.value = gradosSeleccionados.join(', ');
+            gradosInput.value = gradosSeleccionadosArray.join(', ');
             
             let periodosInput = document.getElementById('hidden_periodos');
             if (!periodosInput) {
