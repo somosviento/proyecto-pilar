@@ -12,6 +12,8 @@ class FormularioActividad(db.Model):
     # Campos del formulario
     titulo_actividad = db.Column(db.Text, nullable=False)
     docente_responsable = db.Column(db.String(200), nullable=False)
+    email_responsable = db.Column(db.String(200), nullable=False)  # Email del docente responsable
+    dni_responsable = db.Column(db.String(20), nullable=False)  # DNI del docente responsable
     departamento = db.Column(db.String(200))  # Departamento/Instituto de pertenencia
     
     # Equipo (guardado como JSON)
@@ -80,6 +82,8 @@ class FormularioActividad(db.Model):
             'id': self.id,
             'titulo_actividad': self.titulo_actividad,
             'docente_responsable': self.docente_responsable,
+            'email_responsable': self.email_responsable,
+            'dni_responsable': self.dni_responsable,
             'departamento': self.departamento,
             'equipo': self.equipo,
             'fundamentacion': self.fundamentacion,

@@ -913,6 +913,33 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="email_responsable" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
+                            Correo electrónico 
+                            <span class="required-asterisk">*</span>
+                        </label>
+                        <input type="email" 
+                               id="email_responsable" 
+                               name="email_responsable" 
+                               class="form-control" 
+                               required 
+                               placeholder="correo@ejemplo.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dni_responsable" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
+                            DNI 
+                            <span class="required-asterisk">*</span>
+                        </label>
+                        <input type="text" 
+                               id="dni_responsable" 
+                               name="dni_responsable" 
+                               class="form-control" 
+                               required 
+                               pattern="[0-9]{7,8}" 
+                               placeholder="Ej: 12345678">
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="departamento" class="form-label" style="margin-bottom: 0.5rem; font-size: 1.1rem;">
                             Departamento/Instituto de pertenencia
                         </label>

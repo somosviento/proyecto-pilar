@@ -114,6 +114,16 @@ class PDFGenerator:
         # Docente responsable
         story.append(Paragraph("Docente Responsable", self.styles['SubtitleStyle']))
         story.append(Paragraph(data.get('docente_responsable', ''), self.styles['Normal']))
+        story.append(Spacer(1, 10))
+        
+        # Email del docente responsable
+        story.append(Paragraph("Correo electrónico", self.styles['FieldLabelStyle']))
+        story.append(Paragraph(data.get('email_responsable', ''), self.styles['Normal']))
+        story.append(Spacer(1, 10))
+        
+        # DNI del docente responsable
+        story.append(Paragraph("DNI", self.styles['FieldLabelStyle']))
+        story.append(Paragraph(data.get('dni_responsable', ''), self.styles['Normal']))
         story.append(Spacer(1, 15))
     
     def _add_team_section(self, story, data):
@@ -283,6 +293,8 @@ class PDFGenerator:
         fields = {
             'TITULO_ACTIVIDAD': ensure_not_empty(formulario_data.get('titulo_actividad', '')),
             'DOCENTE_RESPONSABLE': ensure_not_empty(formulario_data.get('docente_responsable', '')),
+            'EMAIL_RESPONSABLE': ensure_not_empty(formulario_data.get('email_responsable', '')),
+            'DNI_RESPONSABLE': ensure_not_empty(formulario_data.get('dni_responsable', '')),
             'DEPARTAMENTO': ensure_not_empty(formulario_data.get('departamento', '')),
             'EQUIPO': ensure_not_empty(equipo_text),
             'FUNDAMENTACION': ensure_not_empty(formulario_data.get('fundamentacion', '')),

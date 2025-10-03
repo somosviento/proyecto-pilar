@@ -144,6 +144,8 @@ def extraer_datos_formulario(request):
     datos = {
         'titulo_actividad': request.form.get('titulo_actividad', '').strip(),
         'docente_responsable': request.form.get('docente_responsable', '').strip(),
+        'email_responsable': request.form.get('email_responsable', '').strip(),
+        'dni_responsable': request.form.get('dni_responsable', '').strip(),
         'departamento': request.form.get('departamento', '').strip(),
         'equipo': equipo,
         'fundamentacion': request.form.get('fundamentacion', '').strip(),
@@ -186,7 +188,7 @@ def generar_texto_periodos(periodos):
 
 def validar_datos_requeridos(datos):
     """Valida que los campos obligatorios estén presentes"""
-    campos_requeridos = ['titulo_actividad', 'docente_responsable', 'fundamentacion', 'objetivos', 'metodologia']
+    campos_requeridos = ['titulo_actividad', 'docente_responsable', 'email_responsable', 'dni_responsable', 'fundamentacion', 'objetivos', 'metodologia']
     
     for campo in campos_requeridos:
         if not datos.get(campo) or len(datos[campo].strip()) == 0:
@@ -200,6 +202,8 @@ def crear_formulario_db(datos):
     formulario = FormularioActividad(
         titulo_actividad=datos['titulo_actividad'],
         docente_responsable=datos['docente_responsable'],
+        email_responsable=datos['email_responsable'],
+        dni_responsable=datos['dni_responsable'],
         departamento=datos['departamento'],
         fundamentacion=datos['fundamentacion'],
         objetivos=datos['objetivos'],
