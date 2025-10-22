@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de Proyecto Pilar - UNCOMA</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo_pilar.jpg') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #607d8b;
+            --color-primary-hover: #546e7a;
+            --color-accent: #4285f4;
+            --bg-secondary: #f8f9fa;
+            --border-color: #eee;
+            --text-primary: #555;
+            --text-secondary: #333;
+            --radius: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--color-primary);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            height: 100px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2.5rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--color-accent);
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #3367d6;
+            transform: translateX(-3px);
+        }
+
+        .section-title {
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--color-primary);
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--radius);
+        }
+
+        .memorial-names {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border: 2px solid var(--color-primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .memorial-names p {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header .subtitle {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .header-logos {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo {
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-logos">
+                <img src="{{ url_for('static', filename='img/logo_pilar.jpg') }}" alt="Logo PILAR" class="logo">
+                <img src="{{ url_for('static', filename='img/logo_seu.png') }}" alt="Logo SEU" class="logo">
+            </div>
+            <h1>Programa Interinstitucional - Lazos y Articulación para Recordar</h1>
+            <p class="subtitle">Proyecto PILAR</p>
+        </div>
+
+        <div class="content">
+            <a href="{{ url_for('formulario') }}" class="back-button">
+                <i class="fas fa-arrow-left"></i> Volver al Formulario
+            </a>
+
+            <h2 class="section-title">Fundamentos</h2>
+            
+            <p>El 1º de septiembre del año 2002, una terrible tragedia conmovió a nuestro país y muy particularmente a la comunidad universitaria del Centro Regional Universitario Bariloche cuando un grupo de estudiantes y docentes del profesorado de Educación Física en una salida educativa fueron atrapados por una avalancha de nieve que se originó cuando descendían por un sendero de la ladera del Cerro Ventana, en la cual nueve estudiantes perdieron la vida.</p>
+
+            <p>Esta situación fue la más grave y dolorosa que atravesó la Universidad del Comahue en sus 45 años produciendo un impacto que será por siempre parte de su historia. A través de estos años se han transitado distintas etapas de éste difícil proceso provocando, algunas rupturas o distanciamientos, pero que a su vez fueron asentando aprendizajes significativos para todos los miembros de nuestra comunidad universitaria tendiendo nuevos lazos.</p>
+
+            <p>Se han realizado diversas acciones y actos de homenaje a los alumnos fallecidos, que han tenido repercusión pública, como así también aquellos silenciosos y personales que han ayudado y ayudan a transitar la pérdida de estos compañeros, alumnos, amigos y en especial hijos de padres que perdieron lo más preciado de su vida.</p>
+
+            <p>En este doloroso camino, el CRUB ha sido acompañado por numerosas instituciones y personas que en forma individual han colaborado tanto en el momento del accidente como así también a lo largo de estos años. Una de ellas y que tuvo un rol sumamente importante, en especial para los padres, fue la comunidad educativa de la escuela Nº 329 del Barrio El Pilar, quien abrió sus puertas a los familiares de los accidentados constituyéndose en un lugar de referencia y contención.</p>
+
+            <p>Si bien siempre se continuó articulando acciones con la escuela, en el año 2012 el Centro Regional Universitario Bariloche formalizó este vínculo asumiendo su padrinazgo mediante la Resolución CD Nº 254/12.</p>
+
+            <div class="highlight-box">
+                <p>Entre otras consideraciones, en la misma se indica "Que el tiempo transcurrido ha posibilitado la reflexión de los hechos hacia el interior del Centro Regional Universitario Bariloche y que es ineludible asumir un compromiso permanente en homenaje de los alumnos fallecidos"</p>
+                
+                <p>"Que el espíritu de estos jóvenes estudiantes se encuentra representado en cada uno de los niños que concurren diariamente a la Escuela Nº 329;"</p>
+                
+                <p>"Que del análisis de la situación de la Escuela Primaria Común Nº 329 se visualiza que presenta diferentes necesidades que ésta Unidad Académica puede asistir en la búsqueda de soluciones, aportando en la medida de sus posibilidades, recursos económicos, humanos y acciones de gestión;"</p>
+                
+                <p>"Que es posible aportar acciones concretas que se extiendan al Barrio Pilar II a partir de actividades educativas, de extensión y transferencia;"</p>
+            </div>
+
+            <div class="memorial-names">
+                <p>En función de éste compromiso institucional que el CRUB ha asumido, el mejor homenaje que podemos rendir a:</p>
+                <p><strong>Mario Sebastián Tapia, Antonio Humberto Díaz, Adrián Marcelo Mercado, Oscar Fabricio Vaccari, María Gimena López, Gimena Solange Padín, Roberto Arturo Montero, Martín Sebastián Lemos y Paolo Jesús Machello</strong>,</p>
+                <p>es el de seguir generando acciones reparadoras, que promuevan una mejor relación entre todos los miembros de nuestra comunidad, que tiendan a lograr mayor calidad educativa y que profundicen el compromiso social de la universidad.</p>
+            </div>
+
+            <p>Con éste objetivo, la Secretaría de Extensión en conjunto con la Comunidad Educativa de la Escuela Nº 329 promueven la aprobación del Programa P.I.L.A.R</p>
+
+            <p>El presente programa será de carácter permanente, impulsando una convocatoria específica a la presentación de propuestas por parte de miembros del Centro Regional Universitario Bariloche, con el objetivo de trabajar en articulación con la Escuela temas de interés educativo, recreativo y social que aporten al aprendizaje integral de toda comunidad educativa y del barrio produciendo en éste intercambio un enriquecimiento mutuo de saberes y transferencias.</p>
+
+            <p>Los objetivos de la convocatoria "PILAR" serán incluidos dentro del Programa Educativo Institucional de la Escuela, lo que permitirá garantizar la continuidad en el tiempo, independientemente de quienes integren el Cuerpo Directivo de la Escuela o el equipo de Gestión del CRUB.</p>
+
+            <h2 class="section-title">Objetivo General</h2>
+            <p>Fortalecer el vínculo entre el Centro Regional Universitario Bariloche y la comunidad educativa de la Escuela Nº329 del Pilar a partir de intercambios de conocimientos y saberes.</p>
+
+            <h2 class="section-title">Objetivos Específicos</h2>
+            <ul>
+                <li>Colaborar con los objetivos pedagógicos de la escuela a través de temáticas especificas</li>
+                <li>Generar un espacio para el aprendizaje mutuo, aportando experiencias y conocimientos desde el ámbito universitario.</li>
+                <li>Favorecer el desarrollo de actividades de enseñanza en contextos particulares que aporten en la formación de los estudiantes universitarios y a su vez conlleven a pensar o reformular enfoques pedagógicos.</li>
+                <li>Difundir y generar acciones que tengan por finalidad mejorar el desempeño en la vida cotidiana de los alumnos y su comunidad.</li>
+            </ul>
+
+            <h2 class="section-title">Requisitos de la Convocatoria</h2>
+            <ul>
+                <li>Ser docente, investigador, estudiante o no docente del CRUB</li>
+                <li>Conformar un grupo o equipo que incorpore como mínimo dos alumnos.</li>
+                <li>Realizar la presentación en tiempo y forma ante la Secretaría de Extensión Universitaria del CRUB.</li>
+            </ul>
+
+            <p>Las propuestas serán evaluadas en forma conjunta por la Secretaría de Extensión y el Equipo Directivo de la escuela.</p>
+
+            <p>La escuela propondrá temáticas de interés temas relacionados a las áreas de Ciencias Sociales, Ciencias Naturales, Matemática, Áreas Especiales -Educación Física, Música y Plástica- para el llamado a la convocatoria, los mismos no serán excluyentes y podrán presentarse propuestas en otras temáticas.</p>
+
+            <p>Al término del año se realizará una evaluación conjunta con el plantel de la escuela para considerar aportes para la consolidación de los objetivos propuestos.</p>
+
+            <h3>Modalidad</h3>
+            <p>Clase Especial, Taller, Salidas. Actividades Recreativas.</p>
+
+            <h3>Destinatarios</h3>
+            <p>Sala de Nivel Inicial 15 alumnos - Primaria 69 alumnos</p>
+
+            <h2 class="section-title">Presentación de la propuesta</h2>
+            <ul>
+                <li>Docente o equipo docente/alumnos responsable de la actividad propuesta.</li>
+                <li>Título de la Actividad.</li>
+                <li>Fundamentación.</li>
+                <li>Objetivos o Propósitos.</li>
+                <li>Metodología.</li>
+                <li>Requisitos. Cantidad de alumnos – Grados que estarían incluidos en la actividad</li>
+                <li>Recursos necesarios.</li>
+                <li>Proponer fechas para la realización de la actividad.</li>
+            </ul>
+
+            <h2 class="section-title">Reconocimiento</h2>
+            <p>La Secretaría de Extensión otorgará certificación a los participantes del programa.</p>
+
+            <p>Las actividades realizadas serán registradas con el objeto de producir un informe anual y durante el mes de septiembre se realizará una exposición gráfica en el CRUB dando cuenta de las actividades llevadas a cabo el año anterior.</p>
+
+            <a href="{{ url_for('formulario') }}" class="back-button" style="margin-top: 2rem;">
+                <i class="fas fa-arrow-left"></i> Volver al Formulario
+            </a>
+        </div>
+    </div>
+</body>
+</html>

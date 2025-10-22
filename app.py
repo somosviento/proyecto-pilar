@@ -66,6 +66,16 @@ def index():
     """Página principal con el formulario"""
     return render_template('formulario.html')
 
+@app.route('/formulario')
+def formulario():
+    """Página del formulario"""
+    return render_template('formulario.html')
+
+@app.route('/acerca-de')
+def acerca_de():
+    """Página con información sobre el Proyecto PILAR"""
+    return render_template('acerca_de.html')
+
 @app.route('/favicon.ico')
 def favicon():
     """Servir favicon"""
